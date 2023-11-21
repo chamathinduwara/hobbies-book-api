@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getHobby, createHobby, updateHobby, deleteHobby } = require("../controllers/hobbyController");
+const { getHobbies, getHobby, createHobby, updateHobby, deleteHobby } = require("../controllers/hobbyController");
 
-router.route("/").get(getHobby);
+router.route("/").get(getHobbies);
+
+router.route("/:id").get(getHobby);
 
 router.route("/").post(createHobby);
 

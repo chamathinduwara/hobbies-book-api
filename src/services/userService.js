@@ -1,20 +1,26 @@
 const UserModel = require('../models/userModel');
-const UserHobbies = require('../models/userHobbyModel');
+const Hobby = require('../models/hobbyModel');
+const UserHobbiesService = require('../models/userHobbyModel');
 const Contact = require('../models/contactModel');
-// const generateUuid  = require('../utils/uuidGenerate');
-// const User = require('../data/userData/User').default
+const contactService = require('./contactService');
+const hobbyService = require('./hobbyService');
+
 
 const getAllUsersService = async () => {
     const users = await UserModel.getAllUsers();
     return users;
 }
 
-const getUserByIdService = (id) => {
-    return UserModel.getUserById(id);
+const getUserByIdService =async (id) => {
+    return await UserModel.getUserById(id);
+}
+
+const getUserByEmailService = async (email) => {
+    return await UserModel.getUserByEmail(email);
 }
 
 const createUserService =async (user) => {
-    const checkMail = await UserModel.getUserByEmail(user.email);
+    const checkMail = await getUserByEmailService(user.email);
     if(checkMail.length > 0){;
         return "Email already exist";
     }
@@ -24,7 +30,7 @@ const createUserService =async (user) => {
         email: user.email,
     }
     await UserModel.createUser(newUser);
-    const returnUser = await UserModel.getUserByEmail(user.email);
+    const returnUser = await getUserByEmailService(user.email);
     for (let i = 0; i < user.contact.length; i++) {
         const newContact = {
             user_id: returnUser[0].user_id,
@@ -32,11 +38,26 @@ const createUserService =async (user) => {
             type: user.contact[i].type
             
         }
-        await Contact.createContact(newContact);
+        await contactService.createContact(newContact);
     }
-    const nContact = await Contact.getContactByUserId(returnUser[0].user_id);
-    console.log(nContact);
-    return result;
+
+    for (let i = 0; i < user.hobbies.length; i++) {
+        let hobbyres = await hobbyService.getHobbyByNameService(user.hobbies[i]);
+        if (hobbyres.length <= 0) {
+            const newHobby = {
+                hobby_name: user.hobbies[i],
+            }
+            await Hobby.createHobby(newHobby);
+            hobbyres = await hobbyService.getHobbyByNameService(user.hobbies[i]);
+        }
+        const newUserHobby = {
+            user_id: returnUser[0].user_id,
+            hobby_id: hobbyres[0].hobby_id,
+        }
+        await UserHobbiesService.createUserHobby(newUserHobby);
+    }
+    await contactService.getContactById(returnUser[0].user_id);
+    return returnUser;
 }
 
 const updateUserService = (id, user) => {

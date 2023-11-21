@@ -1,11 +1,18 @@
 const asyncHandler = require("express-async-handler");
-const userData = require("../data/userData").default;
 const userService = require("../services/userService");
 //@desc Get Users
 //@route GET /api/v1/users
 //@access Public
-const getUser = asyncHandler(async (req, res) => {
+const getUsers = asyncHandler(async (req, res) => {
     const allUsers = await userService.getAllUsersService();
+    res.status(200).json(allUsers);
+});
+
+//@desc Get Users
+//@route GET /api/v1/users
+//@access Public
+const getUser = asyncHandler(async (req, res) => {
+    const allUsers = await userService.getUserByIdService(req.params.id);
     res.status(200).json(allUsers);
 });
 
@@ -13,8 +20,8 @@ const getUser = asyncHandler(async (req, res) => {
 //@route POST /api/v1/Hobbys
 //@access Public
 const createUser = asyncHandler(async (req, res) => {
-    const { name, email, contact } = req.body;
-    if (!name || !email || !contact) {
+    const { name, email, contact, hobbies } = req.body;
+    if (!name || !email || !contact || !hobbies) {
         res.status(400).json({ success: false, msg: "Please provide name, email, hobbies" });
         return;
     }
@@ -41,5 +48,5 @@ const deleteUser = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { getUser, createUser, updateUser, deleteUser }
+module.exports = { getUsers, getUser, createUser, updateUser, deleteUser }
 

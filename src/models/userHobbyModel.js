@@ -2,20 +2,41 @@ const pool = require('../utils/db');
 
 const getHobbyIdbyUserId = async (id) => {
     try {
-        const results = await new Promise((resolve, reject) => {
-            pool.query('SELECT hobby_id FROM UserHobbies WHERE user_id = ?', [id], (err, results, fields) => {
+        const result = await new Promise((resolve, reject) => {
+            pool.query('SELECT hobby_id FROM User_Hobbies WHERE user_id = ?', [id], (err, results, fields) => {
                 if (err) {
                     console.error('Error executing query:', err);
-                    reject(err); // Reject the promise if there's an error
+                    reject(err);
                 } else {
-                    console.log('Fetched UserHobbies:', results);
-                    resolve(results); // Resolve the promise with the fetched data
+                    resolve(results);
                 }
             });
-            return results; // Return the fetched data
         })
+        return result;
     } catch (error) {
-        console.error('Error fetching UserHobbies:', error);
-        throw new Error('Failed to fetch UserHobbies');
+        console.error('Error fetching User_Hobbies:', error);
+        throw new Error('Failed to fetch User_Hobbies');
     }
 }
+
+const createUserHobby = async (userHobby) => {
+    try {
+        const result = await new Promise((resolve, reject) => {
+            pool.query('INSERT INTO User_Hobbies SET ?', userHobby, (err, results, fields) => {
+                if (err) {
+                    console.error('Error executing query:', err);
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+
+        })
+        return result;
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        throw new Error('Failed to fetch users');
+    } 
+}
+
+module.exports = { getHobbyIdbyUserId, createUserHobby };
