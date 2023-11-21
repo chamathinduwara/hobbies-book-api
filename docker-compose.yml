@@ -1,0 +1,37 @@
+version: '3.1'
+services:
+  db:
+    image: mysql
+    restart: no
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./src/utils/database.sql:/docker-entrypoint-initdb.d/database.sql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: hobbies
+      MYSQL_USER: admin
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_PASSWORD: admin
+
+  
+  api:
+    container_name: hobbies-backend
+    image: hobbies-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      DB_HOST: mysql
+      DB_USER: admin
+      DB_ROOT_PASSWORD: admin
+      DB_PASSWORD: admin
+      DB_NAME: hobbies
+    depends_on:
+      - db
+
+
