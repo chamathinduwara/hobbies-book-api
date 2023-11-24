@@ -11,7 +11,7 @@ app.use(express.json())
 app.use("/api/user", require("./src/routes/userRoutes"));
 app.use("/api/hobby", require("./src/routes/hobbyRoutes"));
 app.use("/api/contact", require("./src/routes/contactRoutes"));
-app.use("/api/login", require("./src/routes/loginRoutes"));
+app.use("/api", require("./src/routes/loginRoutes"));
 app.use(errorHandler);
 
 app.listen(port, () => {

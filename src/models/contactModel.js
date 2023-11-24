@@ -60,6 +60,7 @@ const getContactByUserId = async (id) => {
 }
 
 const createContact = async (contact) => {
+    console.log(contact);
     try {
         const results = await new Promise((resolve, reject) => {
             pool.query('INSERT INTO ContactNumbers SET ?', [contact], (err, results, fields) => {
@@ -81,7 +82,7 @@ const createContact = async (contact) => {
 const updateContact = async (id, contact) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            pool.query('UPDATE ContactNumbers SET ? WHERE id = ?', [contact, id], (err, results, fields) => {
+            pool.query('UPDATE ContactNumbers SET ? WHERE user_id = ?', [contact, id], (err, results, fields) => {
                 if (err) {
                     console.error('Error executing query:', err);
                     reject(err);
@@ -98,9 +99,10 @@ const updateContact = async (id, contact) => {
 }
 
 const deleteContact = async (id) => {
+    console.log(id);
     try {
         const result = await new Promise((resolve, reject) => {
-            pool.query('DELETE FROM ContactNumbers WHERE id = ?', [id], (err, results, fields) => {
+            pool.query('DELETE FROM ContactNumbers WHERE user_id = ?', [id], (err, results, fields) => {
                 if (err) {
                     console.error('Error executing query:', err);
                     reject(err);

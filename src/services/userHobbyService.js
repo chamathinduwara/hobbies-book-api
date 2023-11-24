@@ -6,10 +6,10 @@ const userHobbyModel = require('../models/userHobbyModel');
 // }
 
 const getUserHobbyByIdService = async (id) => {
-    return await userHobbyModel.getUserHobbyById(id);
+    return await userHobbyModel.getHobbyIdbyUserId(id);
 }
 
-const createUserHobbyService =async (userHobby) => {
+const createUserHobbyService = async (userHobby) => {
     const newUserHobby = {
         user_id: userHobby.user_id,
         hobby_id: userHobby.hobby_id,
@@ -19,12 +19,20 @@ const createUserHobbyService =async (userHobby) => {
     return returnUserHobby;
 }
 
-// const updateUserHobbyService = (id, userHobby) => {
-//     return userHobbyModel.updateUserHobby(id, userHobby);
-// }
+const updateUserHobbyService = async (id, userHobby) => {
+    await userHobbyModel.deleteHobbyByUserId(id);
+    for (let i = 0; i < userHobby.length; i++) {
+        const newUserHobby = {
+            user_id: id,
+            hobby_id: userHobby[i].hobby_id,
+        }
+        await userHobbyModel.createUserHobby(newUserHobby);
+    }
+    return await userHobbyModel.getHobbyIdbyUserId(id);
+}
 
-// const deleteUserHobbyService = (id) => {
-//     return userHobbyModel.deleteUserHobby(id);
-// }
+const deleteUserHobbyService = async (id) => {
+    return await userHobbyModel.deleteHobbyByUserId(id);
+}
 
-module.exports = { getAllUserHobbiesService, getUserHobbyByIdService, createUserHobbyService, updateUserHobbyService, deleteUserHobbyService }
+module.exports = { getUserHobbyByIdService, createUserHobbyService, deleteUserHobbyService, updateUserHobbyService }

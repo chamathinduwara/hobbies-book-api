@@ -42,7 +42,7 @@ const getHobbyByName = async (name) => {
 const getHobbyById = async (id) => {
     try {
         const result = await new Promise((resolve, reject) => {
-            pool.query('SELECT * FROM Hobbies WHERE hobby_id = ?', [id], (err, results, fields) => {
+            pool.query('SELECT hobby_name FROM Hobbies WHERE hobby_id = ?', [id], (err, results, fields) => {
                 if (err) {
                     console.error('Error executing query:', err);
                     reject(err);

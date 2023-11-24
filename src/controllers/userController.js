@@ -12,8 +12,8 @@ const getUsers = asyncHandler(async (req, res) => {
 //@route GET /api/v1/users
 //@access Public
 const getUser = asyncHandler(async (req, res) => {
-    const allUsers = await userService.getUserByIdService(req.params.id);
-    res.status(200).json(allUsers);
+    const user = await userService.getUserByIdService(req.params.id);
+    res.status(200).json(user);
 });
 
 //@desc Create User
@@ -37,13 +37,17 @@ const createUser = asyncHandler(async (req, res) => {
 //@route PUT /api/v1/User/:id
 //@access Public
 const updateUser = asyncHandler(async (req, res) => {
-    res.status(200).json({ success: true, msg: "Update User" });
+    console.log(req.body);
+    userService.updateUserService(req.body.user_id ,req.body);
+    res.status(200).json(req.body);
 })
 
 //@desc Delete User
 //@route DELETE /api/v1/User/:id
 //@access Public
 const deleteUser = asyncHandler(async (req, res) => {
+    console.log(req.params.id);
+    userService.deleteUserService(req.params.id);
     res.status(200).json({ success: true, msg: "Delete all User" });
 })
 
