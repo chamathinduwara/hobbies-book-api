@@ -3,7 +3,7 @@ const validToken = require("../middleware/validTokenHandler")
 const router = express.Router();
 const { getUsers, getUser, createUser, updateUser, deleteUser } = require("../controllers/userController");
 
-router.use(validToken)
+// router.use(validToken)
 
 router.route("/").get(getUsers);
 

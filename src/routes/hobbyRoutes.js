@@ -3,7 +3,7 @@ const validToken = require("../middleware/validTokenHandler")
 const router = express.Router();
 const { getHobbies, getHobby, createHobby, updateHobby, deleteHobby } = require("../controllers/hobbyController");
 
-router.use(validToken);
+// router.use(validToken);
 
 router.route("/").get(getHobbies);
 
